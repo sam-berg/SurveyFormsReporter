@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+    <script src="https://js.arcgis.com/3.16/"></script>
+    <script>
+      require([
+        "dojo/dom", "dojo/on",
+        "esri/tasks/query", "esri/tasks/QueryTask", "esri/tasks/RelationshipQuery","esri/layers/FeatureLayer","esri/request","dojo/domReady!"
+      ], function (dom, on, Query, QueryTask, RelationshipQuery,FeatureLayer,esriRequest) {
+
+          var oid = 31;
+          var layerURL = "http://services1.arcgis.com/9lDFdeC4JIBgML6L/arcgis/rest/services/service_4adb027365234dc186b9a74c97f6c3c5/FeatureServer/0";
+          this.relatedLayerURL = "http://services1.arcgis.com/9lDFdeC4JIBgML6L/arcgis/rest/services/service_4adb027365234dc186b9a74c97f6c3c5/FeatureServer/1";
+
+          this.oid = oid;
+          this.layerURL = layerURL;
+
+          var queryTask = new QueryTask(this.layerURL);//"http://services1.arcgis.com/9lDFdeC4JIBgML6L/arcgis/rest/services/service_4adb027365234dc186b9a74c97f6c3c5/FeatureServer/0");
+          var sourceFeatureLayer = new FeatureLayer(this.layerURL);//"http://services1.arcgis.com/9lDFdeC4JIBgML6L/arcgis/rest/services/service_4adb027365234dc186b9a74c97f6c3c5/FeatureServer/0");
+
+        var query = new Query();
+        query.returnGeometry = false;
+        query.outFields = [
+          "*"
+        ];
+        query.where = "OBJECTID=" + oid ;
+        queryTask.execute(query, updateResults);
+        
+        var queryRelated = new RelationshipQuery();
+        queryRelated.returnGeometry = false;
+        queryRelated.outFields = [
+          "*"
+        ];
+        queryRelated.objectIds = [oid];
+        sourceFeatureLayer.queryRelatedFeatures(queryRelated, updateRelatedResults);
+
+        function updateResults(results) {
+            var featureAttributes = results.features[0].attributes;
+
+            for (var attributeName in featureAttributes) {
+                setInput(featureAttributes, attributeName, document.getElementById(attributeName));
+
+            }
+
+        }
+
+        function updateRelatedResults(results) {
+
+            res = results[this.oid];
+            
+            var resultCount = res.features.length;
+            for (var i = 0; i < resultCount; i++) {
+                //create new row with attributes
+                    //PHOTONAME:	Screen
+                    //PHOTOLOCATION:	
+                //PHOTODESCRIPTION:	
+                p = res.features[i];
+                //get attachments
+                var reloid = p.attributes.objectid;
+
+                //request:
+                var req = this.relatedLayerURL + "/" + reloid + "/attachments";
+
+                var photosRequest = esriRequest({
+                    url: req,
+                    content: { f: "json" },
+                    handleAs: "json",
+                    callbackParamName: "callback"
+                });
+                photosRequest.then(
+                  function (response) {
+                     
+                      var attachmentCount = response.attachmentInfos.length;
+                      for (var i = 0; i < attachmentCount; i++) {
+
+                          var photoURL = req + "/" + response.attachmentInfos[i].id;
+                          console.log(photoURL);
+                      }
+
+                  }, function (error) {
+                      console.log("Error: ", error.message);
+                  });
+
+            }
+           
+
+        }
+
+        function setInput(obj, property, domElem) {
+            if (domElem!=null)
+                domElem.value = obj[property];
+        }
+
+      });
+    </script>
+
+
+</head>
+<body >
+    <input id="PRJNAME" style="width:200px"/>
+    <input id="INSPDATE" style="width:200px" />
+
+    <input id="INSPTIME" style="width:200px" />
+
+    <input id="CITY" style="width:200px" />
+
+    <input id="RDVPROJ " style="width:200px" />
+
+
+    <input id="IDENTRDV" style="width:200px" />
+
+
+    <input id="DACP" style="width:200px" />
+
+
+    <input id="CONTACTOR" style="width:200px" />
+
+
+    <input id="WEATHER" style="width:200px" />
+
+
+    <input id="PRECIPT" style="width:200px" />
+
+
+    <input id="LOCATIONS" style="width:200px" />
+
+
+    <input id="LOCWITHINPRIORITY" style="width:200px" />
+
+
+    <input id="DISCHARGES" style="width:200px" />
+
+
+    <input id="DISCHARGEDESC" style="width:200px" />
+
+
+    <input id="SWPPPCOMPLIANCE" style="width:200px" />
+
+
+    <input id="SWPPPCOMPLIANCEDESC" style="width:200px" />
+
+
+    <input id="ADDITIONALBMPS" style="width:200px" />
+
+
+    <input id="ADDITIONALBMPSDESC" style="width:200px" />
+
+
+    <input id="PREVOBSCOMPLY" style="width:200px" />
+
+
+    <input id="PREVOBSCOMPLYDESC" style="width:200px" />
+
+
+    <input id="SPILLCONTROLSUPPLIES" style="width:200px" />
+
+
+    <input id="HAZMATERIALS" style="width:200px" />
+
+
+    <input id="HAZLABELED" style="width:200px" />
+
+
+    <input id="WASTES" style="width:200px" />
+
+
+    <input id="WASTESMANAGED" style="width:200px" />
+
+
+    <input id="MISC" style="width:200px" />
+
+
+    <input id="COMMENTS" style="width:200px" />
+
+
+    <input id="NAME" style="width:200px" />
+
+
+    <input id="TITLE" style="width:200px" />
+
+
+</body>
+</html>
+    
