@@ -7,8 +7,8 @@
     <script>
       require([
         "dojo/dom", "dojo/on",
-        "esri/tasks/query", "esri/tasks/QueryTask", "esri/tasks/RelationshipQuery","esri/layers/FeatureLayer","esri/request","dojo/domReady!"
-      ], function (dom, on, Query, QueryTask, RelationshipQuery,FeatureLayer,esriRequest) {
+        "esri/tasks/query", "esri/tasks/QueryTask", "esri/tasks/RelationshipQuery","esri/layers/FeatureLayer","esri/request","dojo/dom-construct","dojo/domReady!"
+      ], function (dom, on, Query, QueryTask, RelationshipQuery,FeatureLayer,esriRequest,domConstruct) {
 
           var oid = 31;
           var layerURL = "http://services1.arcgis.com/9lDFdeC4JIBgML6L/arcgis/rest/services/service_4adb027365234dc186b9a74c97f6c3c5/FeatureServer/0";
@@ -45,7 +45,29 @@
             }
 
         }
+        function createPhotoRecord(p, url) {
 
+            var featureAttributes = p.attributes;
+
+            var photoRecord = "<tr>";
+            photoRecord = photoRecord + "<td>Photo #</td><td>Location:&nbsp;" + featureAttributes.PHOTOLOCATION + "</td>";
+            photoRecord = photoRecord + "</tr>";
+            
+
+            for (var attributeName in featureAttributes) {
+
+            }
+
+            photoRecord = photoRecord + "<tr><td>";
+            photoRecord = photoRecord + "<img src='" + url + "'/>";
+            photoRecord = photoRecord + "<td>Description:&nbsp;" + featureAttributes.PHOTODESCRIPTION + "</td>";
+
+            photoRecord = photoRecord + "</tr>";
+
+            var row = domConstruct.toDom(photoRecord);
+            domConstruct.place(row, "photoTable");
+
+        }
         function updateRelatedResults(results) {
 
             res = results[this.oid];
@@ -53,8 +75,8 @@
             var resultCount = res.features.length;
             for (var i = 0; i < resultCount; i++) {
                 //create new row with attributes
-                    //PHOTONAME:	Screen
-                    //PHOTOLOCATION:	
+                //PHOTONAME:	Screen
+                //PHOTOLOCATION:	
                 //PHOTODESCRIPTION:	
                 p = res.features[i];
                 //get attachments
@@ -76,7 +98,10 @@
                       for (var i = 0; i < attachmentCount; i++) {
 
                           var photoURL = req + "/" + response.attachmentInfos[i].id;
+
+                          
                           console.log(photoURL);
+                          createPhotoRecord(p, photoURL);
                       }
 
                   }, function (error) {
@@ -180,6 +205,15 @@
 
     <input id="TITLE" style="width:200px" />
 
+
+    <table>
+        <thead>
+            <tr><th>Photos</th></tr>
+        </thead>
+        <tbody id="photoTable">
+           
+        </tbody>
+    </table>
 
 </body>
 </html>
