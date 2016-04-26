@@ -53,7 +53,13 @@
         "esri/tasks/query", "esri/tasks/QueryTask", "esri/tasks/RelationshipQuery","esri/layers/FeatureLayer","esri/request","dojo/dom-construct","dojo/domReady!"
       ], function (dom, on, Query, QueryTask, RelationshipQuery,FeatureLayer,esriRequest,domConstruct) {
 
+          var queryObject = dojo.queryToObject(location.search);
+          var myoid = queryObject['?oid'];
+
           var oid = 31;
+          if (myoid != null)
+              oid = myoid;
+
           var layerURL = "http://services1.arcgis.com/9lDFdeC4JIBgML6L/arcgis/rest/services/service_4adb027365234dc186b9a74c97f6c3c5/FeatureServer/0";
           this.relatedLayerURL = "http://services1.arcgis.com/9lDFdeC4JIBgML6L/arcgis/rest/services/service_4adb027365234dc186b9a74c97f6c3c5/FeatureServer/1";
 
