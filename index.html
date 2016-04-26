@@ -3,6 +3,49 @@
 <head>
     <title></title>
 	<meta charset="utf-8" />
+    <style type="text/css">
+
+        .pageHeader{
+            font-weight:bold;
+            text-align:center;
+            width:100%;
+        }
+
+        label{
+             margin:6px 3px 3px 3px;
+ 
+        }
+
+       .textBox{
+            width:200px;
+            margin:6px 3px 3px 3px;
+ 
+        }
+
+        .smallBox{
+            width:100%;
+            height:50px;
+            margin:3px;
+        }
+        .mediumBox{
+            width:100%;
+            height:100px;
+            margin:3px;
+        }
+        
+        .largeBox{
+            width:100%;
+            height:200px;
+            margin:3px;
+        }
+
+        .photoTable{
+            border:1px;
+        }
+        table, th, td {
+            border: .5px solid black;
+        }
+    </style>
     <script src="https://js.arcgis.com/3.16/"></script>
     <script>
       require([
@@ -17,8 +60,8 @@
           this.oid = oid;
           this.layerURL = layerURL;
 
-          var queryTask = new QueryTask(this.layerURL);//"http://services1.arcgis.com/9lDFdeC4JIBgML6L/arcgis/rest/services/service_4adb027365234dc186b9a74c97f6c3c5/FeatureServer/0");
-          var sourceFeatureLayer = new FeatureLayer(this.layerURL);//"http://services1.arcgis.com/9lDFdeC4JIBgML6L/arcgis/rest/services/service_4adb027365234dc186b9a74c97f6c3c5/FeatureServer/0");
+          var queryTask = new QueryTask(this.layerURL);
+          var sourceFeatureLayer = new FeatureLayer(this.layerURL);
 
         var query = new Query();
         query.returnGeometry = false;
@@ -74,10 +117,7 @@
             
             var resultCount = res.features.length;
             for (var i = 0; i < resultCount; i++) {
-                //create new row with attributes
-                //PHOTONAME:	Screen
-                //PHOTOLOCATION:	
-                //PHOTODESCRIPTION:	
+
                 p = res.features[i];
                 //get attachments
                 var reloid = p.attributes.objectid;
@@ -121,92 +161,146 @@
       });
     </script>
 
+    
 
 </head>
 <body >
-    <input id="PRJNAME" style="width:200px"/>
-    <input id="INSPDATE" style="width:200px" />
+    
+    <div class="pageHeader">
+        <span >
+            Attachment A - National Grid <br />
+            Storm Water, Wetlands & Priority Habitat Environmental Compliance<br />
+            Site Inspection / Monitoring Report<br />
+        </span>
+    </div>
+    <br/>
 
-    <input id="INSPTIME" style="width:200px" />
+    <label for="PRJNAME">Project Name:</label>
+    <input id="PRJNAME" class="textBox"/>
 
-    <input id="CITY" style="width:200px" />
+    <label style="margin-left:28px;" for="INSPDATE">Date:</label>
+    <input id="INSPDATE" class="textBox" />
+    <br/>
 
-    <input id="RDVPROJ " style="width:200px" />
+    <label for="CITY">City/Town:</label>
+    <input style="margin-left:20px;" id="CITY" class="textBox" />
+    <label style="margin-left:25px;" for="INSPTIME">Time:</label>
+    <input id="INSPTIME" class="textBox" />
+    <br/>
+
+    <label for="RDVPROJ">Transmission RDV Project?</label>
+    <input id="RDVPROJ" class="textBox" />
+    
+    <label style="margin-left:10px;" for="IDENTRDV">Identify RDV:</label>
+    <input id="IDENTRDV" class="textBox" />
+    <br/>
+
+    <label for="DACP">Distribution Alliance Contractor Project?</label>
+    <input id="DACP" class="textBox" />
+
+    <label for="CONTRACTOR">Identify Contractor:</label>
+    <input id="CONTACTOR" class="textBox" />
+    <br />
+
+    <label for="WEATHER">Current Weather Conditions:</label>
+    <br/>
+    <input id="WEATHER" class="mediumBox" />
+    <br/>
+
+    <label for="PRECIPT">Precipitation Since Last Inspection Date(Date, Est. Duration and Est. Amount from Each Storm):</label>
+    <br/>
+    <input id="PRECIPT" class="smallBox" />
+    <br/>
+
+    <label for="LOCATIONS">Activities/Structures/Locations Inspected:</label>
+    <br/>
+    <input id="LOCATIONS" class="smallBox" />
+    <br/>
+
+    <label for="LOCWITHINPRIORITY">Identify Locations/Activities/Structures Within Designated Priority Habitat (Identify Rare Species Observations, if any)
+and Mitigation/Restoration Measures Implemented:</label>
+    <br/>
+    <input id="LOCWITHINPRIORITY" class="mediumBox" />
+    <br/>
+
+    <label>Any Significant Discharges of Sediment to Water Bodies or Wetlands? </label>
+    <br/>
+    <input id="DISCHARGES" class="mediumBox" />
+    <br/>
+
+    <label>(If "yes," state locations):</label>
+    <br/>
+    <input id="DISCHARGEDESC" class="mediumBox" />
+    <br/>
+
+    <label>Compliance with SWPPP Storm Water Controls, O&M Plan, Order of Conditions or Other Applicable Environmental
+Requirements? </label>
+    <br/>
+    <input id="SWPPPCOMPLIANCE" class="largeBox" />
+    <br/>
+
+    <label>(Explain if "no" for any feature inspected):</label>
+    <input id="SWPPPCOMPLIANCEDESC" class="largeBox" />
+
+    <label>Additional BMPs or Other Corrective Action Needed?</label>
+    <br/>
+    <input id="ADDITIONALBMPS" class="largeBox"/>
+    <br/>
+
+    <label>If so, Where?</label>
+    <br/>
+    <input id="ADDITIONALBMPSDESC" class="largeBox" />
+    <br/>
+
+    <label>Compliance with Previous Observations?</label>
+    <br/>
+    <input id="PREVOBSCOMPLY" class="largeBox" />
+    <br/>
+
+    <label>Compliance Notes:</label>
+    <br/>
+    <input id="PREVOBSCOMPLYDESC" class="largeBox" />
+    <br/>
+
+    <label>Are Spill Control Supplies Available? </label>
+    <input style="margin-left: 100px;" id="SPILLCONTROLSUPPLIES" class="textBox" />
+    <br/>
+
+    <label>Are Oil and/or Hazardous Materials Stored On-Site?</label>
+    <input style="margin-left: 5px;" id="HAZMATERIALS" class="textBox" />
+    <br/>
+
+    <label>If So, Are They Properly Labeled and Managed?</label>
+    <input id="HAZLABELED" class="textBox" />
+    <br/>
 
 
-    <input id="IDENTRDV" style="width:200px" />
+    <label>Are Wastes Stored On-Site?</label>
+    <input id="WASTES" class="textBox" />
 
+    <label>If So, Are They Properly Managed?</label>
+    <input id="WASTESMANAGED" class="textBox" />
+    <br/>
 
-    <input id="DACP" style="width:200px" />
+    <label>Miscellaneous (e.g., dumping?):</label>
+    <br/>
+    <input id="MISC" class="mediumBox" />
+    <br/>
 
+    <label>Comments:</label>
+    <br />
+    <input id="COMMENTS" class="largeBox" />
+    <br/>
 
-    <input id="CONTACTOR" style="width:200px" />
+    <label>Name:</label>
+    <input id="NAME" class="textBox" />
 
+    <label>Title/Company:</label>
+    <input id="TITLE" class="textBox" />
+    <br/>
+    <br />
 
-    <input id="WEATHER" style="width:200px" />
-
-
-    <input id="PRECIPT" style="width:200px" />
-
-
-    <input id="LOCATIONS" style="width:200px" />
-
-
-    <input id="LOCWITHINPRIORITY" style="width:200px" />
-
-
-    <input id="DISCHARGES" style="width:200px" />
-
-
-    <input id="DISCHARGEDESC" style="width:200px" />
-
-
-    <input id="SWPPPCOMPLIANCE" style="width:200px" />
-
-
-    <input id="SWPPPCOMPLIANCEDESC" style="width:200px" />
-
-
-    <input id="ADDITIONALBMPS" style="width:200px" />
-
-
-    <input id="ADDITIONALBMPSDESC" style="width:200px" />
-
-
-    <input id="PREVOBSCOMPLY" style="width:200px" />
-
-
-    <input id="PREVOBSCOMPLYDESC" style="width:200px" />
-
-
-    <input id="SPILLCONTROLSUPPLIES" style="width:200px" />
-
-
-    <input id="HAZMATERIALS" style="width:200px" />
-
-
-    <input id="HAZLABELED" style="width:200px" />
-
-
-    <input id="WASTES" style="width:200px" />
-
-
-    <input id="WASTESMANAGED" style="width:200px" />
-
-
-    <input id="MISC" style="width:200px" />
-
-
-    <input id="COMMENTS" style="width:200px" />
-
-
-    <input id="NAME" style="width:200px" />
-
-
-    <input id="TITLE" style="width:200px" />
-
-
-    <table>
+    <table class="photoTable">
         <thead>
             <tr><th>Photos</th></tr>
         </thead>
