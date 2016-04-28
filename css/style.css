@@ -1,0 +1,62 @@
+﻿
+.pageHeader{
+    font-weight:bold;
+    text-align:center;
+    width:100%;
+}
+.webMapDetail{
+        
+
+}
+
+.webMapThumbnail{
+
+}
+
+.spanHeader{
+    background-color: black;
+    color: white;
+    width: 100%;
+    margin: 5px;
+    min-height: 20px;
+    font-weight:bold;
+    text-align:center;
+}
+
+label{
+        margin:6px 3px 3px 3px;
+ 
+}
+.attachThumbnail{
+    width:350px;
+}
+.textBox{
+    width:200px;
+    margin:6px 3px 3px 3px;
+ 
+}
+
+.smallBox{
+    width:100%;
+    height:50px;
+    margin:3px;
+}
+.mediumBox{
+    width:100%;
+    height:100px;
+    margin:3px;
+}
+        
+.largeBox{
+    width:100%;
+    height:200px;
+    margin:3px;
+}
+
+.photoTable{
+    border:1px;
+}
+table, th, td {
+    border: .5px solid black;
+}
+ 

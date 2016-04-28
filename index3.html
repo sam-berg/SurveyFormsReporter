@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <script type="text/javascript">
+        var package_path = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+        var dojoConfig = {
+            // The locationPath logic below may look confusing but all its doing is
+            // enabling us to load the api from a CDN and load local modules from the correct location.
+            packages: [{
+                name: "application",
+                location: package_path + '/js'
+            }, {
+                name: "config",
+                location: package_path + '/config'
+            }]
+        };
+    </script>
+    <script type="text/javascript" src="//js.arcgis.com/3.14"></script>
+    <script>
+      require([
+        "dojo/parser",
+        "dojo/ready",
+        "dijit/layout/BorderContainer",
+        "dijit/layout/ContentPane",
+        "dojo/dom",
+        "esri/map",
+        "esri/urlUtils",
+        "esri/arcgis/utils",
+        "application/webMapUtils",
+        "application/featureLayerReporter",
+        "dojo/_base/array",
+        "dojo/dom-construct",
+        "dojo/domReady!"
+      ], function(
+        parser,
+        ready,
+        BorderContainer,
+        ContentPane,
+        dom,    
+        Map,
+        urlUtils,
+        arcgisUtils,
+        webMapUtils,
+        featureLayerReporter,
+        array,
+        domConstruct
+      ) {
+          var itemId = "";
+
+          var queryObject = dojo.queryToObject(location.search);
+          if (queryObject['?itemid']) {
+              itemId = queryObject['?itemid'];
+          }
+
+            ready(function(){
+
+            
+                var w = new webMapUtils();
+                var reporter = new featureLayerReporter();
+
+                w.readWebMap(itemId).then(function (webMap) {
+                    
+                    var s = domConstruct.toDom("<div class='webMapDetail'><span>" + webMap.title + "</span><br/><span>" + webMap.subtitle + "</span></br><img class='webMapThumbnail' src='" + webMap.thumbnail + "'/></div>");
+                    domConstruct.place(s,"divWebMapDetails");
+
+                    array.forEach(webMap.layerList,function(layer,i){
+
+                        var p = layer;
+
+                        reporter.generateLayerReport(layer).then(function (layerReport){
+                          
+                            var lr = layerReport;
+                            var d = lr.dom;
+
+                            domConstruct.place(lr.dom, "divMain");
+
+                            var t = domConstruct.toDom("<a href='#" + lr.title + "'>" + lr.title + "</a></br>");
+                            domConstruct.place(t, "divToc");
+                        });
+
+
+                    });
+
+
+                  }
+                );
+
+            });
+
+      });
+    </script>
+</head>
+<body>
+    <div id="divWebMapDetails"></div>
+    <div id="divToc"></div>
+    <div id="divMain"></div>
+</body>
+</html>
