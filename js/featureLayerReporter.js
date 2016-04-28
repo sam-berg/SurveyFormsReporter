@@ -96,7 +96,9 @@ define([
                 }
                 else {
                     var tHead = "<tr>";
-                    for (var a in featureAttributes) {
+                    //for (var a in featureAttributes) {
+                    for (var i = 0; i < layer.fieldAliases.length; i++) {
+                        var a = layer.fieldAliases[i];
                         tHead = tHead + "<th>" + a + "</th>";
                         //tHead = tHead + "<td>" + a + "</td>";
                     }
