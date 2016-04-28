@@ -6,11 +6,16 @@
 }
 .webMapDetail{
         
-
+    font-size: 20px;
 }
 
 .webMapThumbnail{
 
+}
+
+.imgHeader{
+    margin:20px;
+    width:100px;
 }
 
 .spanHeader{
@@ -21,6 +26,7 @@
     min-height: 20px;
     font-weight:bold;
     text-align:center;
+    
 }
 
 label{
