@@ -83,10 +83,15 @@ define([
 
                     if (ll.visible) {
                         webMap.layerList.push(ll);
-
+                        ll.OBJECTIDFIELD = "OBJECTID";//default
                         layerInfo.then(function (res) {
                             var r = res;
                             ll.hasAttachments = res.hasAttachments;
+
+                            array.forEach(res.fields, function (f, ii) {
+                                if (f.type == 'esriFieldTypeOID')
+                                    ll.OBJECTIDFIELD = f.name;
+                            });
 
                         });
                     }

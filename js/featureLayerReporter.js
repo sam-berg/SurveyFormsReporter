@@ -55,8 +55,12 @@ define([
             queryTask.execute(query).then(function (results)
             {
                 var featureAttributes = results.features[0].attributes;
-
   
+                //get attachments
+                var attUrl = null;
+                var reloid = -1;
+
+
                 if (layer.popupInfoTemplate) {
                     var p = "";
                     var tHead = "<tr>";
@@ -80,7 +84,48 @@ define([
 
                         featureRecord = featureRecord + "<td>" + s + "</td>";
 
+                        var attachmentRecord = "";
+                        if (layer.hasAttachments) {
+                            
+                            reloid = featureAttributes[layer.OBJECTIDFIELD];
+
+                            var reqAtt = layer.url + "/" + reloid + "/attachments";
+
+                            var attachInfos = esriRequest({
+                                url: reqAtt + "?f=json",
+                                handleAs: "json",
+                                sync: true
+                            });
+
+
+                            attachInfos.then(function (response) {
+                                
+                                var attachmentCount = response.attachmentInfos.length;
+                                for (var i = 0; i < attachmentCount; i++) {
+                                    attachmentRecord = attachmentRecord + "<tr>";
+                                    //var req = this.relatedLayerURL + "/" + reloid + "/attachments";
+                                    var photoURL = reqAtt + "/" + response.attachmentInfos[i].id;
+
+                                    console.log(photoURL);
+                                    attUrl = "<a target='_blank' href='" + photoURL + "'><img class = 'attachThumbnail' src='" + photoURL + "'/></a>"
+                                    attachmentRecord = attachmentRecord + "<td>" + attUrl + "</td>";
+                                    attachmentRecord = attachmentRecord + "</tr>";
+                                }
+
+                            }, function (error) {
+                                console.log("Error: ", error.message);
+                                attUrl = null;
+                            });
+
+
+                            attachmentRecord = attachmentRecord;
+                        }
+
+
                         featureRecord = featureRecord + "</tr>";
+                        if (layer.hasAttachments)
+                            featureRecord = featureRecord + attachmentRecord;
+
                         layerReport.records.push(featureRecord);
                         layerReport.recordsHTML = layerReport.recordsHTML + featureRecord;
 
@@ -125,6 +170,9 @@ define([
                         layerReport.recordsHTML = layerReport.recordsHTML + featureRecord;
 
                     }
+
+
+
 
                     var t = "<table>";
                     t = t + layerReport.recordHeader;
