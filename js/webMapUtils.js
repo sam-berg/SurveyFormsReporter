@@ -101,14 +101,17 @@ define([
                                 if (f.type == 'esriFieldTypeOID')
                                     ll.OBJECTIDFIELD = f.name;
 
-                                if (ll.popupInfoTemplate == null) {
-                                    ll.fieldNames.push(f.name);
-                                    ll.fieldAliases.push(f.alias);
-                                    ll.fieldNamesString = ll.fieldNamesString + f.name + ",";
-                                }
+                                //if (ll.popupInfoTemplate == null) {
+                                //    ll.fieldNames.push(f.name);
+                                //    ll.fieldAliases.push(f.alias);
+                                //    ll.fieldNamesString = ll.fieldNamesString + f.name + ",";
+                                //}
                             });
 
-                        });
+                            if (ll.popupInfoTemplate == null )
+                                ll.fieldNamesString = "*";
+
+                            });
                     }
 
                 })
