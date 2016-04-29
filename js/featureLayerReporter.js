@@ -52,6 +52,10 @@ define([
               layer.fieldNamesString
             ];
             query.where = "0=0";
+            if (layer.layerDefinition != null) {
+                query.where = layer.layerDefinition;
+            }
+
             queryTask.execute(query).then(function (results)
             {
                 var featureAttributes = results.features[0].attributes;

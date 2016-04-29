@@ -63,26 +63,35 @@ define([
                         sync:true
                     });
 
-                    ll.popupInfoTemplate = l.popupInfo.description;
-                    ll.popupInfoTitle = l.popupInfo.title;
+                    if (l.popupInfo != null) {
+                        ll.popupInfoTemplate = l.popupInfo.description;
+                        ll.popupInfoTitle = l.popupInfo.title;
 
-                    array.forEach(l.popupInfo.fieldInfos, function (f, ii) {
 
-                        var f2 = f;
+                        array.forEach(l.popupInfo.fieldInfos, function (f, ii) {
 
-                        if (f.visible) {
-                            ll.fieldNames.push(f.fieldName);
-                            ll.fieldAliases.push(f.label);
-                            ll.fieldNamesString = ll.fieldNamesString + f.fieldName + ",";
-                        }
+                            var f2 = f;
 
-                    });
+                            if (f.visible) {
+                                ll.fieldNames.push(f.fieldName);
+                                ll.fieldAliases.push(f.label);
+                                ll.fieldNamesString = ll.fieldNamesString + f.fieldName + ",";
+                            }
+
+                        });
+                    }
 
                     if (ll.fieldNamesString.length > 0)
                         ll.fieldNamesString = ll.fieldNamesString.slice(0, -1);
 
                     if (ll.visible) {
+
+                        if (l.layerDefinition != null) {
+                            ll.layerDefinition = l.layerDefinition.definitionExpression;
+                        }
+
                         webMap.layerList.push(ll);
+
                         ll.OBJECTIDFIELD = "OBJECTID";//default
                         layerInfo.then(function (res) {
                             var r = res;
@@ -91,6 +100,12 @@ define([
                             array.forEach(res.fields, function (f, ii) {
                                 if (f.type == 'esriFieldTypeOID')
                                     ll.OBJECTIDFIELD = f.name;
+
+                                if (ll.popupInfoTemplate == null) {
+                                    ll.fieldNames.push(f.name);
+                                    ll.fieldAliases.push(f.alias);
+                                    ll.fieldNamesString = ll.fieldNamesString + f.name + ",";
+                                }
                             });
 
                         });

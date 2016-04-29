@@ -33,6 +33,7 @@
         "application/featureLayerReporter",
         "dojo/_base/array",
         "dojo/dom-construct",
+        "dojo/dom-style",
         "dojo/domReady!"
       ], function(
         parser,
@@ -46,7 +47,8 @@
         webMapUtils,
         featureLayerReporter,
         array,
-        domConstruct
+        domConstruct,
+        domStyle
       ) {
           var itemId = "";
 
@@ -55,20 +57,34 @@
               itemId = queryObject['?itemid'];
           }
 
+        
+ 
+
             ready(function(){
 
             
+                
+
+                var overlayNode = dom.byId("loadingOverlay");
+                var reportNode = dom.byId("divReport");
+
                 var w = new webMapUtils();
                 var reporter = new featureLayerReporter();
 
+               
                 w.readWebMap(itemId).then(function (webMap) {
+                    domStyle.set(overlayNode, 'display', 'block');
+                    domStyle.set(reportNode, 'display', 'none');
                     
+
                     var s = domConstruct.toDom("<div class='webMapDetail'><span>" + webMap.title + "</span><br/><span>" + webMap.subtitle + "</span></br><img class='webMapThumbnail' src='" + webMap.thumbnail + "'/></div>");
                     domConstruct.place(s,"divWebMapDetails");
 
                     array.forEach(webMap.layerList,function(layer,i){
 
                         var p = layer;
+                        domStyle.set(overlayNode, 'display', 'block');
+                        domStyle.set(reportNode, 'display', 'none');
 
                         reporter.generateLayerReport(layer).then(function (layerReport){
                           
@@ -79,6 +95,11 @@
 
                             var t = domConstruct.toDom("<a href='#" + lr.title + "'>" + lr.title + "</a></br>");
                             domConstruct.place(t, "divToc");
+
+
+                            domStyle.set(overlayNode, 'display', 'none');
+                            domStyle.set(reportNode, 'display', 'block');
+
                         });
 
 
@@ -94,9 +115,14 @@
     </script>
 </head>
 <body>
-    <img class="imgHeader" src="http://gis2.vhb.com/images/VHB_logo_white.jpg"/>
-    <div id="divWebMapDetails"></div>
-    <div id="divToc"></div>
-    <div id="divMain"></div>
+    
+    <div id="loadingOverlay" class="loadingOverlay pageOverlay"><span>Loading...</span><img class="imgHeader" src="http://gis2.vhb.com/images/VHB_logo_white.jpg" /></div>
+    <div id="divReport" style="display:none;">
+        <img class="imgHeader" src="http://gis2.vhb.com/images/VHB_logo_white.jpg" />
+        <div id="divWebMapDetails"></div>
+        <div id="divToc"></div>
+        <div id="divMain"></div>
+    </div>
+   
 </body>
 </html>
